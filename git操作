@@ -173,3 +173,5 @@ feature/MCUX-44590_semc_rt10xx_update_header
       - Fix SEMC driver build error and warning.i
 
 C:\Users\nxf75777\mcu-sdk-2.0\boards\src\driver_examples\pxp\blend
+
+生成了很多submodule的解决办法 ：git submodule update devices
