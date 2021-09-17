@@ -1,0 +1,175 @@
+C:\Users\nxf75777\mcu-sdk-2.0\middleware\issdk\yml_v2\common yml
+C:\Users\nxf75777\mcu-sdk-2.0\bin\generator\batch_v2>C:\Users\nxf75777\mcu-sdk-2.0\bin\generator\batch_v2\all_frdmke15z.rb -p hello_world -c manifest
+C:\Users\nxf75777\mcu-sdk-2.0\boards\mc56f81000evk\driver_examples\lpi2c\edma_b2b_transfer\master
+
+ruby helper.rb -c -i boards/evkbmimxrt1060/driver_examples/ewm/hardware_init.c
+PS C:\Users\nxf75777\mcu-sdk-2.0\bin\generator\batch_v2\batch_sdk> C:\Users\nxf75777\mcu-sdk-2.0\bin\generator\batch_v2\batch_sdk\sdk_evkmimxrt1060.rb
+PS C:\Users\nxf75777\mcu-sdk-2.0\bin\generator\batch_v2\batch_lib> C:\Users\nxf75777\mcu-sdk-2.0\bin\generator\batch_v2\batch_lib\MIMXRT1176_cm7.rb
+C:\Users\nxf75777\mcu-sdk-2.0\lib\ksdk_platform_lib\MIMXRT1176\cm7\iar
+git fetch
+git checkout origin/feature/MCUX-44881_hx8394_mipi_panel
+git checkout -b feature/MCUX-41096_port_tmr_from_dsc
+git ls-files boards/twrmc56f8200/driver_examples/qtmr/inputcapture/
+将submit的patch打包：git format-patch 4f0cc9b025153d3215af69efc3395314c3c07e0a
+将别人的patch用到自己的branch，此时有一个对应的别人的patch的commit： git am 0001-dsc.patch
+在当前目录下寻找文件：find middleware/issdk/yml_v2/ -name "issdk_hal.h"
+【devices submodule也需要更新到最新：cd devices/
+git fetch
+git checkout -f origin/master
+cd ..        submodule更新到最新：git submodule update 】
+【将commit重置到48202d2,还原了所有在48202d2之后的提交commit
+（此时48202为最新commit）：git reset 48202d2648683fa8ede4c9fd17ab7fed29e1308d，此时所以的改动还在只是没有add，再次add】
+【如何取消git add，可以先把修改commit，然后git reset，之后再add 想要add的文件 git add <file>】
+（一）git推送代码步骤————把PATCH推送到远程 git push origin PATCH
+ git fetch
+【git branch PATCH 创建分支
+git checkout PATCH 切换分支到PATCH】或者二合一 git checkout -b <private branch>
+git add -u .           只add被track的文件
+git diff --cached      查看代码更改
+git commit --no-verify 需要写明备注信息（git commit --amend 可以修改备注信息）
+(git commit
+ruby helper.rb -c -i boards/evkbmimxrt1060/driver_examples/ewm/hardware_init.c
+git add boards/evkbmimxrt1060/driver_examples/ewm/hardware_init.c
+git commit)
+
+【git 如何解决 (master|MERGING)
+git reset --hard head //回退版本信息】
+【git 如何解决 (master|REBASE 1/2)
+git rebase --abort
+或者rm -rf .git/rebase-apply】
+
+【(git remote remove origin
+git remote add origin ssh://git@bitbucket.sw.nxp.com/mcucore/mcu-soc.git )
+(git pull --rebase origin han)】
+git push origin PATCH (git push -f origin han强制覆盖)
+创建pull request
+解决问题之后需要https://jira.sw.nxp.com/browse/关掉问题
+（二）git常用查看信息的命令
+git branch -r查看远程分支
+git branch 查看当前分支 
+git log 查看提交的commit
+git status 查看提交的状态
+* git show 查看当前commit下的具体改动
+git show <commit> 查看某个commit的具体改动
+git log --grep="fix" 【commit title 有fix的】
+git log --oneline --graph
+git log -5 -raw
+git reflog --data-iso 【列出哪年哪月哪日HEAD变更历史】
+git diff <commit1> <commit2> 【两个commit之间的变化】 
+git reset --hard 恢复到add之Ss前的代码（用在代码改错了的情况）
+git reset –-soft：回退到某个版本，只回退了commit的信息，代码仍然为commit后的，不会恢复到index file一级。如果还要提交，直接commit即可；
+git reset -–hard：彻底回退到某个版本，本地的源码也会变为上一个版本的内容，撤销的commit中所包含的更改被冲掉；
+git reset . 可以撤销add跟踪的所有文件
+git reset --hard origin/feature/MCUX-44590_semc_rt10xx_update_header 强制将本地重置成远程的内容。用在本地修改错误后误删了commit，但是远程分支是正确的，可以将本地重置。
+git branch -r | grep rt10xx 可以查看远程分支中含有关键字rt10xx的分支
+（三）遇到的几种情况
+1.合并两个commit 【git rebase -i commit-id 合并第一个和第二个commit，将commit-id设为第三个，在打开的页面中把第一个pick改为r，pick改为f，结果是把第二个合到第一个】
+2.删除一个commit 【git rebase -i commit-id 移除第一个id，将commit-id设为第二个，，在打开的页面中把pick改为drop】
+3.删除一个本地分支branch  【git branch -D bugfix/mcux-44700】
+4.移除一个被多add的文件 【git rm app.c】
+5.在不慎多次提交后出现 (master|REBASE 1/2)，
+解决办法：回退提交，【git rebase --abort】 ，解决
+6.commit强制返回到上次
+git reset --hard db8c49fce9f891a083bd0f9303baa4aaf4ebe63f
+7.git commit -a 加了-a，在 commit 的时候，能帮你省一步 git add ，但也只是对修改和删除文件有效
+git commit -a -m "PATCH apply"
+8.当在feature分支下当git add -u . 添加追踪了不想追踪的文件并且commit了，如何只留下想要追踪的文件：
+在当前branch下新建一个branch：git branch aaaaa
+然后git log可以看见当前commit下有了一个新分支aaaaa
+在feature分支下 git reset --hard HEAD^ 强制重置为上一版本commit，但是aaaa分支下的add没变
+还是在feature分支下git show --stat aaaaa，可以看见
+ bin/generator/sdk_generator                        |  2 +-
+ platform/drivers/semc/doxygen/ChangeLogKSDK.txt    |  2 +-
+ platform/drivers/semc/fsl_semc.c                   | 21 ++++++++++++++++++---
+ platform/drivers/semc/fsl_semc.h                   | 22 +++++++++++++++++-----
+在feature分支下 git checkout aaaaa  platform/drivers/semc
+                git checkout aaaaa  bin/generator/records_v2 就可以将分支aaaaa这几个目录下文件的改变转移到feature分支下
+再执行 git diff --cached --stat
+就可以看见feature分支下追踪到的文件 platform/drivers/semc/fsl_semc.c                   | 21 ++++++++++++++++++---
+                                    platform/drivers/semc/fsl_semc.h                   | 22 +++++++++++++++++-----
+[详情操作可以见8-12-git操作.txt]
+（四）
+如何删除本地分支：先git branch 然后git checkout master切换到主分支，之后删除新创建的分支git branch -d branchnew
+删除远程分支 git push origin :bugfix/mcux-44575
+push的时候可以改远程端的分支名 git push origin han:bugfix/mcux-44575
+
+Git出现游离分支(HEAD detached from XXXX解决方法):
+git reflog 找到需要恢复的commit ，记下前面的commit id
+git branch temp  312f7d7 新建一个名字叫temp的分支，用这个分支代替之前的临时分支并且拥有想要恢复的commit， 312f7d7为要恢复的commit id
+git push origin temp推送到仓库
+git checkout master切换到主分支
+git merge temp 将temp合并到master
+保险起见，先git push origin master 推送到仓库
+查看是否更新，若更新则git branch -d temp删除该分支
+不要用git clean -dfx 强制全部还原
+git checkout -b feature/mcux-41058-create-MC56F200-cmp-driver
+
+[MCUX-45489][DSC]Board.h is placed below CFG generated files 
+
+ - Board.h is placed below CFG generated files 
+
+Signed-off-by: 
+
+
+
+
+git branch bugfix/mcux-44575_fix_uart_clock_bug han
+git checkout bugfix/mcux-44575_fix_uart_clock_bug
+git push origin bugfix/mcux-44575_fix_uart_clock_bug
+git commit -m "[MCUX-44672][EWM]fix EWM driver example build failed bug 
+           
+              
+
+[MCUX-44590][SEMC]Update the driver code for new RT10xx header files
+
+ - Update the driver code in fsl_semc.h and fsl_semc.c
+
+Signed-off-by:
+
+
+Update driver version in fsl_semc.h, ChangeLogKSDK.txt, drv_semc.yml. New version 2.4.0.
+
+Support RK055MHD091A0 MIPI panel in SDK
+git pull --rebase origin bugfix/mcux-44575_fix_uart_clock_bug
+
+git pull origin bugfix/mcux-44672_fix_EWM_driver_example_build_failed_bug
+git push origin bugfix/mcux-44672_fix_EWM_driver_example_build_failed_bug
+
+git push origin bugfix/mcux-44700_fix_REL15_demo_driver_project_build_fail_bug
+跳过代码格式检查
+git commit --no-verify
+
+git reset --hard 【merge前的版本号】
+
+git push -f origin bugfix/mcux-44575_fix_uart_clock_bug 强制写入
+
+git push -f origin bugfix/mcux-44672_fix_EWM_driver_example_build_failed_bug
+**
+git log --stat
+git reset --hard 8817c45e8f
+git log --pretty=oneline --graph
+基于这个分支上面的分支合并 git log
+git rebase -i b7b3e53d353904f11f17894cd4562c86d5e98aa2
+r
+f
+
+
+ git log --stat
+ git rm LPC810/drivers/ChangeLogKSDK.txt~  删除txt~文件
+git show
+
+在不慎多次提交后出现 (master|REBASE 1/2)，
+解决办法：回退提交，git rebase --abort ，解决
+
+git push -f origin bugfix/mcux-44672_fix_EWM_driver_example_build_failed_bug
+
+git reset --hard
+git rm qtmr_inputcapture_outputpwm_dma.c
+
+feature/MCUX-44590_semc_rt10xx_update_header
+
+  - 2.4.0
+    - Bug Fixes
+      - Fix SEMC driver build error and warning.i
+
+C:\Users\nxf75777\mcu-sdk-2.0\boards\src\driver_examples\pxp\blend
